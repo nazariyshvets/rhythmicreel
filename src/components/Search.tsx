@@ -80,8 +80,9 @@ function Search() {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setPage(1);
     setIsLoading(true);
+    setPage(1);
+    setCurrentSongIndex(0);
     getSongs(`${query} ${genre}`)
       .then((data) => setSongs(data))
       .catch(() => setSongs([]))
@@ -112,7 +113,7 @@ function Search() {
       />
     );
   });
-  const currentSong = displaySongs[currentSongIndex];
+  const currentAudio = displaySongs[currentSongIndex]?.audio;
 
   return (
     <div className="flex w-full flex-col gap-y-6 rounded-2xl bg-white px-4 py-8 sm:p-8 md:w-1/2">
@@ -133,9 +134,9 @@ function Search() {
             {songRows}
           </div>
 
-          {currentSong && (
+          {currentAudio && (
             <AudioPlayer
-              song={currentSong}
+              src={currentAudio}
               onPrev={handlePrevSong}
               onNext={handleNextSong}
               theme="dark"

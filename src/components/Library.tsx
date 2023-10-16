@@ -4,7 +4,7 @@ import AudioPlayer from "./AudioPlayer";
 import Song from "../interfaces/Song";
 
 function Library() {
-  const [songs, setSongs] = useState<Song[]>(
+  const [songs, _setSongs] = useState<Song[]>(
     JSON.parse(localStorage.getItem("songs") || "[]"),
   );
   const [currentSongIndex, setCurrentSongIndex] = useState(
@@ -27,7 +27,7 @@ function Library() {
     setCurrentSongIndex(getNextSongIndex());
   }
 
-  const currentSong = songs[currentSongIndex];
+  const currentAudio = songs[currentSongIndex]?.audio;
 
   return (
     <div className="flex w-full flex-col items-center justify-center gap-y-4">
@@ -37,9 +37,9 @@ function Library() {
         onPrev={handlePrev}
         onNext={handleNext}
       />
-      {currentSong && (
+      {currentAudio && (
         <AudioPlayer
-          song={currentSong}
+          src={currentAudio}
           onPrev={handlePrev}
           onNext={handleNext}
           className="md:w-1/2"

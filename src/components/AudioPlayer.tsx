@@ -1,13 +1,12 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useCallback } from "react";
 import { useGlobalAudioPlayer } from "react-use-audio-player";
 import AudioSeekBar from "./AudioSeekBar";
 import AudioTime from "./AudioTime";
 import AudioPlaybackPanel from "./AudioPlaybackPanel";
 import AudioVolume from "./AudioVolume";
-import Song from "../interfaces/Song";
 
 interface AudioPlayerProps {
-  song: Song;
+  src: string;
   onPrev: () => void;
   onNext: () => void;
   theme?: "white" | "dark";
@@ -15,30 +14,44 @@ interface AudioPlayerProps {
 }
 
 function AudioPlayer({
-  song,
+  src,
   onPrev,
   onNext,
   theme = "white",
   className = "",
 }: AudioPlayerProps) {
   const isInitialRender = useRef(true);
-  const { isReady, load, togglePlayPause } = useGlobalAudioPlayer();
+  const { isReady, load, togglePlayPause, stop } = useGlobalAudioPlayer();
+
+  const loadAudio = useCallback(
+    (autoplay: boolean = false) => {
+      if (src) {
+        load(src, { autoplay: autoplay, html5: true, format: "mp3" });
+      }
+    },
+    [load, src],
+  );
 
   function handlePlayPause() {
     if (isReady) {
       togglePlayPause();
     } else {
-      load(song.audio, { autoplay: true, html5: true, format: "mp3" });
+      loadAudio(true);
     }
   }
 
   useEffect(() => {
+    return () => stop();
+  }, [stop]);
+
+  useEffect(() => {
     if (!isInitialRender.current) {
-      load(song.audio, { autoplay: true, html5: true, format: "mp3" });
+      loadAudio(true);
     } else {
       isInitialRender.current = false;
+      loadAudio();
     }
-  }, [load, song]);
+  }, [loadAudio]);
 
   return (
     <div
