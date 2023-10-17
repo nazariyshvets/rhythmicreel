@@ -113,7 +113,7 @@ function Search() {
       />
     );
   });
-  const currentAudio = displaySongs[currentSongIndex]?.audio;
+  const currentSong = displaySongs[currentSongIndex];
 
   return (
     <div className="flex w-full flex-col gap-y-6 rounded-2xl bg-white px-4 py-8 sm:p-8 md:w-1/2">
@@ -134,9 +134,9 @@ function Search() {
             {songRows}
           </div>
 
-          {currentAudio && (
+          {currentSong && currentSong.audio && (
             <AudioPlayer
-              src={currentAudio}
+              song={currentSong}
               onPrev={handlePrevSong}
               onNext={handleNextSong}
               theme="dark"

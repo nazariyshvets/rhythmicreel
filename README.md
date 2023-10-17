@@ -2,7 +2,7 @@
 
 ## Some features:
 
-1. Custom music player.
+1. Custom music player with the visualization of the song wave.
 2. Great-looking background animation.
 3. Searching and filtering songs.
 

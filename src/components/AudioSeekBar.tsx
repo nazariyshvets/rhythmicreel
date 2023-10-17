@@ -13,12 +13,13 @@ function AudioSeekBar({ className = "" }: AudioSeekBarProps) {
 
   const rewind = useCallback(
     (event: MouseEvent) => {
-      const { pageX: eventOffsetX } = event;
       const seekBar = seekBarElem.current;
 
       if (seekBar) {
-        const elementOffsetX = seekBar.offsetLeft;
-        const elementWidth = seekBar.clientWidth;
+        const elementRect = seekBar.getBoundingClientRect();
+        const elementOffsetX = elementRect.left + window.pageXOffset;
+        const elementWidth = elementRect.width;
+        const eventOffsetX = event.pageX;
         const percent = (eventOffsetX - elementOffsetX) / elementWidth;
         seek(percent * duration);
       }

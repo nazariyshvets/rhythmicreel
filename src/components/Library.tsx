@@ -27,7 +27,7 @@ function Library() {
     setCurrentSongIndex(getNextSongIndex());
   }
 
-  const currentAudio = songs[currentSongIndex]?.audio;
+  const currentSong = songs[currentSongIndex];
 
   return (
     <div className="flex w-full flex-col items-center justify-center gap-y-4">
@@ -37,9 +37,9 @@ function Library() {
         onPrev={handlePrev}
         onNext={handleNext}
       />
-      {currentAudio && (
+      {currentSong && currentSong.audio && (
         <AudioPlayer
-          src={currentAudio}
+          song={currentSong}
           onPrev={handlePrev}
           onNext={handleNext}
           className="md:w-1/2"
