@@ -10,7 +10,7 @@ interface AudioVisualizerProps {
 const numBars = 20;
 const barGap = 2;
 
-const AudioVisualizer = ({ peaks, className }: AudioVisualizerProps) => {
+function AudioVisualizer({ peaks, className }: AudioVisualizerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
   const animationFrameIdRef = useRef(0);
@@ -71,6 +71,6 @@ const AudioVisualizer = ({ peaks, className }: AudioVisualizerProps) => {
   }, [drawWaveform]);
 
   return <canvas ref={canvasRef} className={className} />;
-};
+}
 
 export default AudioVisualizer;

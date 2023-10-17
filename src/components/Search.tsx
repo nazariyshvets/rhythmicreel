@@ -1,4 +1,4 @@
-import { useState, useEffect, FormEvent } from "react";
+import { useState, useEffect, useCallback, memo, FormEvent } from "react";
 import Loading from "react-loading";
 import { useAlert } from "react-alert";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
@@ -9,6 +9,7 @@ import { getSongs } from "../apis/jamendoApi";
 import Song from "../interfaces/Song";
 
 const PAGE_LIMIT = 5;
+const MemoizedAudioPlayer = memo(AudioPlayer);
 
 function Search() {
   const [userSongs, setUserSongs] = useState<Song[]>(
@@ -39,29 +40,29 @@ function Search() {
     }
   }
 
-  function getDisplaySongs() {
+  const getDisplaySongs = useCallback(() => {
     return songs.slice((page - 1) * PAGE_LIMIT, page * PAGE_LIMIT);
-  }
+  }, [page, songs]);
 
-  function getPrevSongIndex() {
+  const getPrevSongIndex = useCallback(() => {
     const displaySongsLength = getDisplaySongs().length;
     return (
       (currentSongIndex - 1 + displaySongsLength) % displaySongsLength || 0
     );
-  }
+  }, [currentSongIndex, getDisplaySongs]);
 
-  function getNextSongIndex() {
+  const getNextSongIndex = useCallback(() => {
     const displaySongsLength = getDisplaySongs().length;
     return (currentSongIndex + 1) % displaySongsLength || 0;
-  }
+  }, [currentSongIndex, getDisplaySongs]);
 
-  function handlePrevSong() {
+  const handlePrevSong = useCallback(() => {
     setCurrentSongIndex(getPrevSongIndex());
-  }
+  }, [getPrevSongIndex]);
 
-  function handleNextSong() {
+  const handleNextSong = useCallback(() => {
     setCurrentSongIndex(getNextSongIndex());
-  }
+  }, [getNextSongIndex]);
 
   function addToLibrary(song: Song, isInLibrary: boolean) {
     if (isInLibrary) {
@@ -135,7 +136,7 @@ function Search() {
           </div>
 
           {currentSong && currentSong.audio && (
-            <AudioPlayer
+            <MemoizedAudioPlayer
               song={currentSong}
               onPrev={handlePrevSong}
               onNext={handleNextSong}
